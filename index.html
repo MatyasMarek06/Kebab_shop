@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Veltruska Šawerma Kebab</title>
+  <meta name="description" content="Poctivá šawerma, dürüm a křupavý falafel na Proseku. Veltruská 27, Praha 9. Otevřeno každý den do 22:00, parkování zdarma, platba kartou i mobilem.">
+  <meta name="theme-color" content="#121212">
+  <meta property="og:title" content="Veltruska Šawerma Kebab">
+  <meta property="og:description" content="Poctivá šawerma a křupavý kebab na Proseku. Veltruská 27, Praha 9.">
+  <meta property="og:type" content="restaurant">
+  <meta property="og:locale" content="cs_CZ">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%23FFB703'%3E%3Crect x='14' y='14' width='36' height='36'/%3E%3Crect x='14' y='14' width='36' height='36' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap">
+
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            coal: '#121212',
+            ash: '#1E1E1E',
+            line: '#34302A',
+            cream: '#FBF3E4',
+            sand: '#CFC7B8',
+            muted: '#5B5347',
+            fire: '#E63946',
+            ember: '#B3202C',
+            gold: '#FFB703',
+            herb: '#2A9D8F',
+            pine: '#14645B'
+          },
+          fontFamily: {
+            display: ['Oswald', 'Arial Narrow', 'Impact', 'sans-serif'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* Koncept: tmavá uhlová ulice, krémové "papíry" z pultu a oblouky inspirované blízkovýchodní architekturou. */
+    :root {
+      color-scheme: dark;
+      --header-h: 68px;
+      --star-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23FFB703' stroke-opacity='.11'%3E%3Crect x='20' y='20' width='32' height='32'/%3E%3Crect x='20' y='20' width='32' height='32' transform='rotate(45 36 36)'/%3E%3Cpath d='M0 36h13M59 36h13M36 0v13M36 59v13'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 12px); -webkit-text-size-adjust: 100%; }
+    body { background: #121212; color: #FBF3E4; padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+    @media (min-width: 768px) { body { padding-bottom: 0; } }
+
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+    @media (min-width: 640px) {
+      .wrap {
+        padding-left: max(24px, env(safe-area-inset-left, 0px));
+        padding-right: max(24px, env(safe-area-inset-right, 0px));
+      }
+    }
+
+    h1, h2, h3 { text-wrap: balance; }
+    .pattern { background-image: var(--star-pattern); background-size: 72px 72px; }
+    .arch { border-radius: 999px 999px 18px 18px; }
+    :focus-visible { outline: 3px solid #FFB703; outline-offset: 2px; border-radius: 6px; }
+
+    .eyebrow { font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #FFB703; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      min-height: 52px; padding: .75rem 1.5rem; border-radius: 12px;
+      font-weight: 700; font-size: 1rem; line-height: 1.2; text-align: center;
+      transition: transform .18s ease, background-color .18s ease, color .18s ease, border-color .18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0) scale(.98); }
+    .btn-primary { background: #E63946; color: #fff; }
+    .btn-primary:hover { background: #F04C58; }
+    .btn-ghost { border: 2px solid #FFB703; color: #FFB703; }
+    .btn-ghost:hover { background: #FFB703; color: #121212; }
+    .btn-sm { min-height: 44px; padding: .5rem 1rem; font-size: .9375rem; border-radius: 10px; }
+
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #8A8378; flex: none; }
+    .is-open .dot { background: #2A9D8F; animation: pulse 2.2s ease-out infinite; }
+    .is-closed .dot { background: #E63946; }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(42, 157, 143, .7); }
+      70%, 100% { box-shadow: 0 0 0 8px rgba(42, 157, 143, 0); }
+    }
+
+    .tab { flex: none; min-height: 44px; padding: .5rem 1rem; border-radius: 999px; border: 1px solid #34302A; color: #CFC7B8; font-weight: 600; font-size: .9375rem; white-space: nowrap; transition: background-color .18s ease, color .18s ease, border-color .18s ease; }
+    .tab:hover { border-color: #FFB703; color: #FBF3E4; }
+    .tab[aria-pressed="true"] { background: #FFB703; border-color: #FFB703; color: #121212; }
+    .tabs-scroll { scrollbar-width: none; }
+    .tabs-scroll::-webkit-scrollbar { display: none; }
+
+    .menu-grid { transition: opacity .14s ease; }
+    .menu-grid.is-switching { opacity: 0; }
+    .menu-card { transition: transform .22s ease, box-shadow .22s ease; }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px -12px rgba(255, 183, 3, .45); }
+    .menu-card.enter { animation: rise .32s ease both; animation-delay: calc(var(--i) * 28ms); }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .tag { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .55rem; border-radius: 6px; font-size: .75rem; font-weight: 700; line-height: 1.3; }
+    .tag svg { width: 13px; height: 13px; }
+    .tag-bestseller { background: #FFB703; color: #121212; }
+    .tag-hot { background: #FBE0E0; color: #B3202C; }
+    .tag-vegan { background: #2A9D8F; color: #121212; }
+    .tag-veg { background: #D8EFEA; color: #14645B; }
+
+    .lift { transition: transform .22s ease, border-color .22s ease; }
+    .lift:hover { transform: translateY(-4px); border-color: #FFB703; }
+    @media (min-width: 1024px) {
+      .tilt-l { transform: rotate(-1.2deg); }
+      .tilt-r { transform: rotate(1.2deg); }
+      .lift.tilt-l:hover, .lift.tilt-r:hover { transform: rotate(0) translateY(-4px); }
+    }
+
+    .chip { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .7rem; border-radius: 8px; background: #1E1E1E; border: 1px solid #34302A; font-size: .875rem; font-weight: 500; }
+    .chip svg { width: 16px; height: 16px; color: #FFB703; flex: none; }
+
+    .mobile-panel:not([hidden]) { animation: drop .2s ease both; }
+    @keyframes drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    .hours-row td { padding: .7rem .85rem; }
+    .hours-row.today { background: #FFB703; color: #121212; font-weight: 700; }
+    .hours-row.today td:first-child { border-radius: 8px 0 0 8px; }
+    .hours-row.today td:last-child { border-radius: 0 8px 8px 0; }
+    .today-pill { display: inline-block; margin-left: .5rem; padding: .05rem .4rem; border-radius: 5px; background: #121212; color: #FFB703; font-size: .6875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .btn:hover, .menu-card:hover, .lift:hover { transform: none; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Veltruska Šawerma Kebab",
+    "servesCuisine": ["Kebab", "Blízkovýchodní", "Vegetariánská", "Veganská"],
+    "acceptsReservations": false,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Veltruská 27",
+      "postalCode": "190 00",
+      "addressLocality": "Praha 9-Prosek",
+      "addressCountry": "CZ"
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "10:00", "closes": "22:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "11:00", "closes": "22:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "11:30", "closes": "22:00" }
+    ]
+  }
+  </script>
+</head>
+
+<body class="font-sans antialiased">
+
+  <header class="sticky z-40 border-b border-line bg-coal/95 backdrop-blur" style="top: env(safe-area-inset-top, 0px)">
+    <div class="wrap flex h-[68px] items-center justify-between gap-3">
+      <a href="#top" class="flex min-w-0 items-center gap-2.5" aria-label="Veltruska Šawerma Kebab, zpět nahoru">
+        <svg class="hidden h-9 w-9 flex-none text-gold min-[420px]:block" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+          <rect x="14" y="14" width="36" height="36"></rect>
+          <rect x="14" y="14" width="36" height="36" transform="rotate(45 32 32)"></rect>
+        </svg>
+        <span class="font-display uppercase leading-none">
+          <span class="block text-[11px] font-medium tracking-[.2em] text-gold">Veltruska</span>
+          <span class="mt-1 block whitespace-nowrap text-base font-semibold tracking-wide sm:text-lg">Šawerma Kebab</span>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="Hlavní navigace">
+        <a class="text-sand transition-colors hover:text-gold" href="#menu">Menu</a>
+        <a class="text-sand transition-colors hover:text-gold" href="#proc-k-nam">Proč k nám</a>
+        <a class="text-sand transition-colors hover:text-gold" href="#recenze">Recenze</a>
+        <a class="text-sand transition-colors hover:text-gold" href="#kontakt">Kde nás najdete</a>
+      </nav>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="#kontakt" id="status-badge" class="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-ash px-2.5 py-1.5 text-xs font-semibold">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="status-text">Otevírací doba</span>
+        </a>
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Veltrusk%C3%A1%2027%2C%20190%2000%20Praha%209" target="_blank" rel="noopener" class="btn btn-primary btn-sm hidden sm:inline-flex">
+          <i data-lucide="map-pin" class="h-4 w-4"></i>Kudy k nám
+        </a>
+        <button id="menu-toggle" type="button" class="flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-line lg:hidden" aria-label="Otevřít navigaci" aria-expanded="false" aria-controls="mobile-panel">
+          <span id="icon-open"><i data-lucide="menu" class="h-5 w-5"></i></span>
+          <span id="icon-close" hidden><i data-lucide="x" class="h-5 w-5"></i></span>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-panel" class="mobile-panel border-t border-line bg-coal lg:hidden" aria-label="Mobilní navigace" hidden>
+      <div class="wrap flex flex-col py-2">
+        <a class="flex min-h-12 items-center border-b border-line font-medium" href="#menu">Menu</a>
+        <a class="flex min-h-12 items-center border-b border-line font-medium" href="#proc-k-nam">Proč k nám</a>
+        <a class="flex min-h-12 items-center border-b border-line font-medium" href="#recenze">Recenze</a>
+        <a class="flex min-h-12 items-center font-medium" href="#kontakt">Kde nás najdete</a>
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Veltrusk%C3%A1%2027%2C%20190%2000%20Praha%209" target="_blank" rel="noopener" class="btn btn-primary my-2">
+          <i data-lucide="map-pin" class="h-5 w-5"></i>Kudy k nám
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <section class="pattern relative">
+      <div class="wrap grid items-center gap-10 py-10 lg:grid-cols-[1.1fr_.9fr] lg:gap-14 lg:py-20">
+        <div class="flex min-w-0 flex-col items-start gap-6">
+          <p class="inline-flex items-center gap-2 rounded-full bg-ash px-3.5 py-2 text-sm font-semibold ring-1 ring-line">
+            <span aria-hidden="true">⭐</span> 4,3 na Google (300+ spokojených zákazníků)
+          </p>
+          <h1 class="font-display text-[clamp(2.75rem,10.5vw,5.25rem)] font-bold uppercase leading-[1.04]">
+            Poctivá <span class="text-gold">šawerma</span> a křupavý kebab <span class="text-fire">na Proseku</span>
+          </h1>
+          <p class="max-w-[52ch] text-lg leading-relaxed text-sand">
+            Čerstvé suroviny, autentické koření a přátelská atmosféra. Zastavte se na rychlý oběd, večeři nebo večerní jídlo a odneste si poctivou porci za férovou cenu.
+          </p>
+          <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <a href="#menu" class="btn btn-primary">
+              Prohlédnout menu<i data-lucide="arrow-down" class="h-5 w-5"></i>
+            </a>
+            <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Veltrusk%C3%A1%2027%2C%20190%2000%20Praha%209" target="_blank" rel="noopener" class="btn btn-ghost">
+              <i data-lucide="navigation" class="h-5 w-5"></i>Navigovat na místo
+            </a>
+          </div>
+          <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-sand">
+            <li class="flex items-center gap-1.5"><i data-lucide="car" class="h-4 w-4 text-gold"></i>Parkování zdarma</li>
+            <li class="flex items-center gap-1.5"><i data-lucide="leaf" class="h-4 w-4 text-herb"></i>Vegan i veggie</li>
+            <li class="flex items-center gap-1.5"><i data-lucide="credit-card" class="h-4 w-4 text-gold"></i>Karta i mobil</li>
+          </ul>
+        </div>
+
+        <figure class="min-w-0">
+          <div class="grid grid-cols-[1.55fr_1fr] gap-3 sm:gap-4">
+            <div class="relative row-span-2 min-h-0">
+              <img class="arch h-full w-full object-cover ring-2 ring-gold ring-offset-4 ring-offset-coal"
+                   src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&amp;fit=crop&amp;w=800&amp;h=1000&amp;q=75"
+                   width="800" height="1000" alt="Šťavnatá šawerma v pitě s masem, cibulí a petrželkou" fetchpriority="high">
+            </div>
+            <img class="arch aspect-square w-full object-cover"
+                 src="https://images.unsplash.com/photo-1633321702518-7feccafb94d5?auto=format&amp;fit=crop&amp;w=480&amp;h=480&amp;q=75"
+                 width="480" height="480" alt="Dürüm s masem a zeleninou zabalený v papíru">
+            <img class="arch aspect-square w-full object-cover"
+                 src="https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&amp;fit=crop&amp;w=480&amp;h=480&amp;q=75"
+                 width="480" height="480" alt="Křupavý falafel se zeleninou v boxu s sebou">
+          </div>
+          <figcaption class="mt-3 text-right text-xs text-sand">Ilustrační fotografie: Unsplash</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="menu" class="bg-ash py-14 lg:py-20">
+      <div class="wrap flex flex-col gap-8">
+        <div class="flex flex-col gap-3">
+          <p class="eyebrow">Co dnes dáte?</p>
+          <h2 class="font-display text-4xl font-bold uppercase sm:text-5xl">Menu</h2>
+          <p class="max-w-[60ch] text-sand">Vyberte si kategorii a omáčku podle chuti.</p>
+        </div>
+
+        <div id="menu-tabs" class="tabs-scroll flex gap-2 overflow-x-auto pb-1 lg:flex-wrap" role="group" aria-label="Filtrovat menu podle kategorie"></div>
+
+        <div id="menu-grid" class="menu-grid grid gap-4 md:grid-cols-2 xl:grid-cols-3" aria-live="polite"></div>
+        <noscript>
+          <p class="rounded-xl bg-cream p-5 text-coal">Pro zobrazení menu zapněte JavaScript, nebo se za námi zastavte na adrese Veltruská 27, Praha 9.</p>
+        </noscript>
+
+        <div class="rounded-2xl border border-line bg-coal p-5 sm:p-7">
+          <h3 class="font-display text-2xl font-semibold uppercase">Omáčky na výběr</h3>
+          <ul class="mt-5 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            <li class="flex items-start gap-3">
+              <span class="mt-1 h-7 w-7 flex-none rounded-[50%_50%_50%_0] bg-[#F3E9D2]" aria-hidden="true"></span>
+              <span class="min-w-0"><span class="block font-semibold">Česneková</span><span class="text-sm text-sand">Jemná, krémová, s česnekem</span></span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 h-7 w-7 flex-none rounded-[50%_50%_50%_0] bg-herb" aria-hidden="true"></span>
+              <span class="min-w-0"><span class="block font-semibold">Bylinková</span><span class="text-sm text-sand">Svěží, s čerstvými bylinkami</span></span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 h-7 w-7 flex-none rounded-[50%_50%_50%_0] bg-fire" aria-hidden="true"></span>
+              <span class="min-w-0"><span class="block font-semibold">Pálivá (Harissa)</span><span class="text-sm text-sand">Ostrá, s kořením a chilli</span></span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 h-7 w-7 flex-none rounded-[50%_50%_50%_0] bg-gold" aria-hidden="true"></span>
+              <span class="min-w-0"><span class="block font-semibold">Tahini / Hummus</span><span class="text-sm text-sand">Sezamová, oříškově plná</span></span>
+            </li>
+          </ul>
+        </div>
+
+        <p class="text-sm text-sand">Ceny a nabídka se mohou měnit. Na alergeny se prosím zeptejte obsluhy.</p>
+      </div>
+    </section>
+
+    <section id="proc-k-nam" class="py-14 lg:py-20">
+      <div class="wrap flex flex-col gap-8">
+        <div class="flex flex-col gap-3">
+          <p class="eyebrow">Proč k nám</p>
+          <h2 class="max-w-[20ch] font-display text-4xl font-bold uppercase sm:text-5xl">Dobré jídlo bez zbytečných komplikací</h2>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="lift flex flex-col gap-3 rounded-2xl border border-line bg-ash p-6">
+            <span class="text-4xl" aria-hidden="true">🥩</span>
+            <h3 class="font-display text-xl font-semibold uppercase">Poctivé maso a šawerma</h3>
+            <p class="text-sm leading-relaxed text-sand">Šťavnaté maso naložené v autentické směsi koření.</p>
+          </article>
+          <article class="lift flex flex-col gap-3 rounded-2xl border border-line bg-ash p-6">
+            <span class="text-4xl" aria-hidden="true">🌱</span>
+            <h3 class="font-display text-xl font-semibold uppercase">Bohatá vegan a veggie nabídka</h3>
+            <p class="text-sm leading-relaxed text-sand">Křupavý domácí falafel, grilované halloumi a čerstvá zelenina.</p>
+          </article>
+          <article class="lift flex flex-col gap-3 rounded-2xl border border-line bg-ash p-6">
+            <span class="text-4xl" aria-hidden="true">💳</span>
+            <h3 class="font-display text-xl font-semibold uppercase">Pohodlná platba</h3>
+            <p class="text-sm leading-relaxed text-sand">Bereme platební karty, Apple Pay i Google Pay.</p>
+          </article>
+          <article class="lift flex flex-col gap-3 rounded-2xl border border-line bg-ash p-6">
+            <span class="text-4xl" aria-hidden="true">🚗</span>
+            <h3 class="font-display text-xl font-semibold uppercase">Snadná dostupnost</h3>
+            <p class="text-sm leading-relaxed text-sand">Parkování zdarma přímo u podniku a venkovní posezení.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="recenze" class="pattern bg-ash py-14 lg:py-20">
+      <div class="wrap flex flex-col gap-10">
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div class="flex flex-col gap-3">
+            <p class="eyebrow">Recenze</p>
+            <h2 class="font-display text-4xl font-bold uppercase sm:text-5xl">Co o nás píšete</h2>
+            <p class="max-w-[60ch] text-sand">Shrnutí toho, co zákazníci opakovaně chválí v recenzích na Google Maps.</p>
+          </div>
+          <p class="flex flex-none items-baseline gap-2">
+            <span class="font-display text-6xl font-bold text-gold">4,3</span>
+            <span class="text-sm text-sand">z 5 hvězdiček<br>300+ recenzí</span>
+          </p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-3">
+          <article class="lift tilt-lflex flex-col gap-3 rounded-2xl bg-cream p-6 text-coal">
+            <i data-lucide="thumbs-up" class="h-7 w-7 text-ember"></i>
+            <p class="font-display text-2xl font-semibold uppercase leading-tight">Skvělé jídlo za super cenu</p>
+            <p class="text-sm leading-relaxed text-muted">Zákazníci chválí poměr ceny a kvality. Odcházíte najedení a peněženka to přežije.</p>
+          </article>
+          <article class="lift flexflex-col gap-3 rounded-2xl bg-cream p-6 text-coal">
+            <i data-lucide="thumbs-up" class="h-7 w-7 text-ember"></i>
+            <p class="font-display text-2xl font-semibold uppercase leading-tight">Neuvěřitelně milá obsluha</p>
+            <p class="text-sm leading-relaxed text-muted">V recenzích se často objevuje přátelský přístup a rychlé vyřízení objednávky.</p>
+          </article>
+          <article class="lift tilt-rflex flex-col gap-3 rounded-2xl bg-cream p-6 text-coal">
+            <i data-lucide="thumbs-up" class="h-7 w-7 text-ember"></i>
+            <p class="font-display text-2xl font-semibold uppercase leading-tight">Velké porce a čisté prostředí</p>
+            <p class="text-sm leading-relaxed text-muted">Poctivé porce a uklizené posezení. Hodí se na rychlý oběd i večeři v klidu.</p>
+          </article>
+        </div>
+
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Veltruska%20%C5%A0awerma%20Kebab%2C%20Veltrusk%C3%A1%2027%2C%20Praha%209" target="_blank" rel="noopener" class="btn btn-ghost self-start">
+          Přečíst recenze na Google Maps<i data-lucide="external-link" class="h-5 w-5"></i>
+        </a>
+      </div>
+    </section>
+
+    <section id="kontakt" class="py-14 lg:py-20">
+      <div class="wrap grid gap-10 lg:grid-cols-2 lg:gap-14">
+        <div class="flex min-w-0 flex-col gap-7">
+          <div class="flex flex-col gap-3">
+            <p class="eyebrow">Kde nás najdete</p>
+            <h2 class="font-display text-4xl font-bold uppercase sm:text-5xl">Veltruská 27, Prosek</h2>
+            <address class="not-italic text-lg text-sand">Veltruská 27, 190 00 Praha 9-Prosek</address>
+          </div>
+
+          <div class="rounded-2xl border border-line bg-ash p-3 sm:p-4">
+            <div class="flex items-center justify-between gap-3 px-3 pb-3 pt-1">
+              <h3 class="font-display text-xl font-semibold uppercase">Otevírací doba</h3>
+              <p id="status-detail" class="text-right text-sm font-medium text-sand"></p>
+            </div>
+            <table class="w-full border-collapse text-[0.9375rem]">
+              <caption class="sr-only">Otevírací doba podle dnů v týdnu</caption>
+              <tbody id="hours-body" class="[font-variant-numeric:tabular-nums]"></tbody>
+            </table>
+            <noscript>
+              <p class="px-3 pb-2 text-sm">Po–Pá 10:00–22:00, So 11:00–22:00, Ne 11:30–22:00</p>
+            </noscript>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <h3 class="font-display text-xl font-semibold uppercase">Služby</h3>
+            <ul class="flex flex-wrap gap-2">
+              <li class="chip"><i data-lucide="utensils"></i>Na místě (Dine-in)</li>
+              <li class="chip"><i data-lucide="trees"></i>Venkovní zahrádka</li>
+              <li class="chip"><i data-lucide="shopping-bag"></i>S sebou (Takeout)</li>
+              <li class="chip"><i data-lucide="bike"></i>Rozvoz (Delivery)</li>
+              <li class="chip"><i data-lucide="square-parking"></i>Parkování zdarma</li>
+              <li class="chip"><i data-lucide="accessibility"></i>Bezbariérové parkování</li>
+            </ul>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <h3 class="font-display text-xl font-semibold uppercase">Platba</h3>
+            <ul class="flex flex-wrap gap-2">
+              <li class="chip"><i data-lucide="credit-card"></i>Platební karty</li>
+              <li class="chip"><i data-lucide="nfc"></i>Bezkontaktně (NFC)</li>
+              <li class="chip"><i data-lucide="smartphone"></i>Apple Pay</li>
+              <li class="chip"><i data-lucide="smartphone"></i>Google Pay</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="flex min-w-0 flex-col gap-4">
+          <iframe
+            class="h-[360px] w-full rounded-2xl border border-line bg-ash lg:h-full lg:min-h-[480px]"
+            src="https://maps.google.com/maps?q=Veltrusk%C3%A1%2027%2C%20190%2000%20Praha%209&amp;z=16&amp;hl=cs&amp;output=embed"
+            title="Mapa: Veltruská 27, Praha 9-Prosek"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Veltrusk%C3%A1%2027%2C%20190%2000%20Praha%209" target="_blank" rel="noopener" class="btn btn-primary w-full">
+            <i data-lucide="navigation" class="h-5 w-5"></i>Spustit navigaci
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line py-8">
+    <div class="wrap flex flex-col gap-4 text-sm text-sand md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="font-display text-lg font-semibold uppercase tracking-wide text-cream">Veltruska Šawerma Kebab</p>
+        <p>Veltruská 27, 190 00 Praha 9-Prosek</p>
+      </div>
+      <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Navigace v patičce">
+        <a class="hover:text-gold" href="#menu">Menu</a>
+        <a class="hover:text-gold" href="#proc-k-nam">Proč k nám</a>
+        <a class="hover:text-gold" href="#recenze">Recenze</a>
+        <a class="hover:text-gold" href="#kontakt">Kde nás najdete</a>
+      </nav>
+      <p>© <span id="year">2026</span> Veltruska Šawerma Kebab</p>
+    </div>
+  </footer>
+
+  <div class="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-coal/95 pt-2 backdrop-blur md:hidden" style="padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px))">
+    <div class="wrap grid grid-cols-2 gap-2">
+      <a href="#menu" class="btn btn-ghost btn-sm min-h-[52px]"><i data-lucide="utensils" class="h-5 w-5"></i>Menu</a>
+      <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Veltrusk%C3%A1%2027%2C%20190%2000%20Praha%209" target="_blank" rel="noopener" class="btn btn-primary btn-sm min-h-[52px]"><i data-lucide="navigation" class="h-5 w-5"></i>Navigovat</a>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Data k úpravě: ceny, položky menu a otevírací doba ===== */
+    const CATEGORIES = [
+      { id: 'vse', label: 'Vše' },
+      { id: 'sawerma', label: 'Šawerma & Dürüm' },
+      { id: 'kebab', label: 'Kebab v chlebu & Boxy' },
+      { id: 'talire', label: 'Talíře' },
+      { id: 'veg', label: 'Vegetarián & Vegan' },
+      { id: 'napoje', label: 'Nápoje & Doplňky' }
+    ];
+
+    const TAGS = {
+      bestseller: { label: 'Bestseller', cls: 'tag-bestseller', icon: 'flame-kindling' },
+      hot: { label: 'Pálivé', cls: 'tag-hot', icon: 'flame' },
+      vegan: { label: '100% Vegan', cls: 'tag-vegan', icon: 'leaf' },
+      veg: { label: 'Vegetarián', cls: 'tag-veg', icon: 'sprout' }
+    };
+
+    const MENU = [
+      { cat: 'sawerma', name: 'Šawerma Klasik', price: 169, tags: ['bestseller'], desc: 'Kuřecí šawerma z grilu v teplé tortille, rajče, okurka, červené zelí a česneková omáčka.' },
+      { cat: 'sawerma', name: 'Dürüm Kebab', price: 179, tags: ['bestseller'], desc: 'Tenká placka plná šťavnatého kebabu, cibule se sumakem, salát a omáčka podle výběru.' },
+      { cat: 'sawerma', name: 'Dürüm Harissa', price: 185, tags: ['hot'], desc: 'Kuřecí šawerma, nakládané papričky, rukola a pořádná dávka pálivé harissy.' },
+      { cat: 'sawerma', name: 'Šawerma XL', price: 209, tags: [], desc: 'Dvojitá porce masa pro velký hlad, čerstvá zelenina, hranolky přímo v tortille a dvě omáčky.' },
+
+      { cat: 'kebab', name: 'Kebab v chlebu', price: 149, tags: ['bestseller'], desc: 'Křupavá pita plněná kebabem, zelným salátem, rajčaty a omáčkou podle chuti.' },
+      { cat: 'kebab', name: 'Kebab Box', price: 165, tags: [], desc: 'Kebab na vrstvě zlatých hranolek, s čerstvým salátem a dvěma omáčkami. Ideální s sebou.' },
+      { cat: 'kebab', name: 'Šawerma Box s rýží', price: 175, tags: [], desc: 'Kuřecí šawerma, kořeněná rýže, nakládaná zelenina a tahini v praktickém boxu.' },
+
+      { cat: 'talire', name: 'Šawerma Talíř', price: 209, tags: ['bestseller'], desc: 'Velká porce kuřecí šawermy, rýže nebo hranolky, salát, pita a česneková omáčka.' },
+      { cat: 'talire', name: 'Kebab Talíř', price: 209, tags: [], desc: 'Grilovaný kebab, hranolky, salát z čerstvé zeleniny, pita a omáčka podle výběru.' },
+      { cat: 'talire', name: 'Mix Grill Talíř', price: 229, tags: ['hot'], desc: 'Kebab i kuřecí šawerma na jednom talíři, kořeněná rýže, salát, pita a harissa.' },
+
+      { cat: 'veg', name: 'Falafel Dürüm', price: 149, tags: ['vegan'], desc: 'Křupavý domácí falafel, hummus, rajče, okurka, petržel a nakládaná zelenina.' },
+      { cat: 'veg', name: 'Halloumi Dürüm', price: 165, tags: ['veg'], desc: 'Grilovaný sýr halloumi, rukola, rajčata, červené zelí a bylinková omáčka.' },
+      { cat: 'veg', name: 'Falafel Box s hummusem', price: 159, tags: ['vegan'], desc: 'Šest kuliček falafelu, krémový hummus, čerstvý salát a nakládané okurky.' },
+      { cat: 'veg', name: 'Veggie Talíř', price: 189, tags: ['veg'], desc: 'Falafel i grilované halloumi, hummus, kořeněná rýže, zeleninová variace a pita.' },
+
+      { cat: 'napoje', name: 'Hranolky s omáčkou', price: 69, tags: ['veg'], desc: 'Zlaté křupavé hranolky a jedna omáčka podle výběru.' },
+      { cat: 'napoje', name: 'Baklava (2 ks)', price: 69, tags: ['veg'], desc: 'Křehké listové těsto, ořechy a medový sirup. Sladká tečka k obědu.' },
+      { cat: 'napoje', name: 'Ayran', price: 45, tags: ['veg'], desc: 'Vychlazený slaný jogurtový nápoj, který skvěle zchladí pálivé jídlo.' },
+      { cat: 'napoje', name: 'Domácí limonáda', price: 59, tags: ['vegan'], desc: 'Citron, čerstvá máta a perlivá voda. Svěží i k velké porci.' }
+    ];
+
+    /* Klíč odpovídá Date.getDay(): 0 = neděle, 6 = sobota. */
+    const HOURS = {
+      1: { name: 'Pondělí', open: '10:00', close: '22:00' },
+      2: { name: 'Úterý', open: '10:00', close: '22:00' },
+      3: { name: 'Středa', open: '10:00', close: '22:00' },
+      4: { name: 'Čtvrtek', open: '10:00', close: '22:00' },
+      5: { name: 'Pátek', open: '10:00', close: '22:00' },
+      6: { name: 'Sobota', open: '11:00', close: '22:00' },
+      0: { name: 'Neděle', open: '11:30', close: '22:00' }
+    };
+
+    /* ===== Otevírací doba podle času v ČR ===== */
+    const toMinutes = (hhmm) => {
+      const [h, m] = hhmm.split(':').map(Number);
+      return h * 60 + m;
+    };
+
+    function pragueNow(date = new Date()) {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Prague',
+        weekday: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23'
+      }).formatToParts(date);
+      const get = (type) => parts.find((p) => p.type === type).value;
+      return {
+        day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday')),
+        minutes: Number(get('hour')) * 60 + Number(get('minute'))
+      };
+    }
+
+    function openingStatus({ day, minutes }) {
+      const today = HOURS[day];
+      if (minutes < toMinutes(today.open)) {
+        return { open: false, detail: `Otevíráme dnes v ${today.open}` };
+      }
+      if (minutes < toMinutes(today.close)) {
+        return { open: true, detail: `Dnes otevřeno do ${today.close}` };
+      }
+      return { open: false, detail: `Otevíráme zítra v ${HOURS[(day + 1) % 7].open}` };
+    }
+
+    const badge = document.getElementById('status-badge');
+
+    function refreshStatus() {
+      const now = pragueNow();
+      const status = openingStatus(now);
+      badge.classList.toggle('is-open', status.open);
+      badge.classList.toggle('is-closed', !status.open);
+      document.getElementById('status-text').textContent = status.open ? 'Právě otevřeno' : 'Právě zavřeno';
+      badge.title = status.detail;
+      document.getElementById('status-detail').textContent = status.detail;
+      renderHours(now.day);
+    }
+
+    function renderHours(todayIndex) {
+      document.getElementById('hours-body').innerHTML = [1, 2, 3, 4, 5, 6, 0].map((d) => {
+        const h = HOURS[d];
+        const isToday = d === todayIndex;
+        return `<tr class="hours-row${isToday ? ' today' : ''}"${isToday ? ' aria-current="date"' : ''}>
+          <td>${h.name}${isToday ? '<span class="today-pill">Dnes</span>' : ''}</td>
+          <td class="whitespace-nowrap text-right">${h.open} – ${h.close}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    /* ===== Menu a filtrování ===== */
+    const grid = document.getElementById('menu-grid');
+    const tabs = document.getElementById('menu-tabs');
+    let activeCategory = 'vse';
+
+    function drawIcons() {
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function cardTemplate(item, index, animate) {
+      const tagsHtml = item.tags.map((key) => {
+        const tag = TAGS[key];
+        return `<span class="tag ${tag.cls}"><i data-lucide="${tag.icon}"></i>${tag.label}</span>`;
+      }).join('');
+      return `<article class="menu-card${animate ? ' enter' : ''} flex flex-col gap-3 rounded-2xl bg-cream p-5 text-coal" style="--i:${index}">
+        <div class="flex items-baseline justify-between gap-4">
+          <h3 class="min-w-0 font-display text-xl font-semibold uppercase leading-tight">${item.name}</h3>
+          <p class="flex-none whitespace-nowrap font-display text-2xl font-bold text-ember [font-variant-numeric:tabular-nums]">${item.price}&nbsp;Kč</p>
+        </div>
+        <p class="text-sm leading-relaxed text-muted">${item.desc}</p>
+        ${tagsHtml ? `<div class="mt-auto flex flex-wrap gap-1.5 pt-1">${tagsHtml}</div>` : ''}
+      </article>`;
+    }
+
+    function renderMenu(animate) {
+      const items = activeCategory === 'vse' ? MENU : MENU.filter((item) => item.cat === activeCategory);
+      grid.innerHTML = items.map((item, i) => cardTemplate(item, i, animate)).join('');
+      drawIcons();
+    }
+
+    function selectCategory(id, button) {
+      if (id === activeCategory) return;
+      activeCategory = id;
+      tabs.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-pressed', String(t === button)));
+      button.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      grid.classList.add('is-switching');
+      setTimeout(() => {
+        renderMenu(true);
+        grid.classList.remove('is-switching');
+      }, 140);
+    }
+
+    tabs.innerHTML = CATEGORIES.map((c) =>
+      `<button type="button" class="tab" data-category="${c.id}" aria-pressed="${c.id === activeCategory}">${c.label}</button>`
+    ).join('');
+
+    tabs.addEventListener('click', (event) => {
+      const button = event.target.closest('.tab');
+      if (button) selectCategory(button.dataset.category, button);
+    });
+
+    /* ===== Mobilní navigace ===== */
+    const toggle = document.getElementById('menu-toggle');
+    const panel = document.getElementById('mobile-panel');
+
+    function setPanel(open) {
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Zavřít navigaci' : 'Otevřít navigaci');
+      document.getElementById('icon-open').hidden = open;
+      document.getElementById('icon-close').hidden = !open;
+    }
+
+    toggle.addEventListener('click', () => setPanel(panel.hidden));
+    panel.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setPanel(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !panel.hidden) {
+        setPanel(false);
+        toggle.focus();
+      }
+    });
+
+    /* ===== Start ===== */
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderMenu(false);
+    refreshStatus();
+    setInterval(refreshStatus, 30000);
+    drawIcons();
+  </script>
+</body>
+</html>
